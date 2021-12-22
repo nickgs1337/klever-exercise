@@ -27,6 +27,25 @@ func Create(cryptocurrency *Cryptocurrency) (*Cryptocurrency, error) {
 	return cryptocurrency, nil
 }
 
+func List() ([]Cryptocurrency, error) {
+	cursor, err := getCollection().Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, err
+	}
+
+	var results []Cryptocurrency
+	for cursor.Next(context.TODO()) {
+		var currency Cryptocurrency
+		err := cursor.Decode(&currency)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, currency)
+	}
+
+	return results, nil
+}
+
 func GetBySymbol(symbol string) (*Cryptocurrency, error) {
 	var cryptocurrency Cryptocurrency
 	err := getCollection().FindOne(context.TODO(), bson.D{{"_id", symbol}}).Decode(&cryptocurrency)

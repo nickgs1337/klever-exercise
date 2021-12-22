@@ -80,6 +80,14 @@ func Update(symbol string, cryptocurrency *Cryptocurrency) (*Cryptocurrency, err
 	return cryptocurrency, nil
 }
 
+func Delete(symbol string) error {
+	_, err := getCollection().DeleteOne(context.TODO(), bson.M{"_id": symbol})
+	if err != nil {
+		return errors.New("error while deleting")
+	}
+	return nil
+}
+
 func getCollection() *mongo.Collection {
 	return utils.GetDatabase().Collection(collection)
 }

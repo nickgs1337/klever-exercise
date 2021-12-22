@@ -27,8 +27,17 @@ func (server *Server) Get(context context.Context, symbol *CryptocurrencySymbol)
 }
 
 func (server *Server) List(context context.Context, message *EmptyMessage) (*CryptocurrencyListMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	currencies, err := List()
+	if err != nil {
+		return nil, err
+	}
+
+	var cryptoMessages []*CryptocurrencyMessage
+	for _, currency := range currencies {
+		cryptoMessages = append(cryptoMessages, toMessage(&currency))
+	}
+
+	return &CryptocurrencyListMessage{Cryptocurrency: cryptoMessages}, nil
 }
 
 func (server *Server) Update(context context.Context, request *UpdateCryptocurrencyRequest) (*CryptocurrencyMessage, error) {

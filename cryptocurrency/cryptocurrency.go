@@ -17,8 +17,14 @@ type Connection struct {
 }
 
 func (server *Server) Create(context context.Context, message *CryptocurrencyMessage) (*CryptocurrencyMessage, error) {
-	newCurrency, err := Create(fromMessage(message))
+	//validate request
+	err := validateCryptocurrencyMessage(message)
+	if err != nil {
+		return nil, err
+	}
 
+	//perform creation
+	newCurrency, err := Create(fromMessage(message))
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +57,13 @@ func (server *Server) List(context context.Context, message *EmptyMessage) (*Cry
 }
 
 func (server *Server) Update(context context.Context, request *UpdateCryptocurrencyRequest) (*CryptocurrencyMessage, error) {
+	//validate request
+	err := validateCryptocurrencyMessage(request.NewCryptocurrency)
+	if err != nil {
+		return nil, err
+	}
+
+	//perform update
 	currency, err := Update(request.OldSymbol, fromMessage(request.NewCryptocurrency))
 
 	if err != nil {

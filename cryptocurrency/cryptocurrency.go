@@ -17,8 +17,13 @@ func (server *Server) Create(context context.Context, message *CryptocurrencyMes
 }
 
 func (server *Server) Get(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	currency, err := GetBySymbol(symbol.Symbol)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toMessage(currency), nil
 }
 
 func (server *Server) List(context context.Context, message *EmptyMessage) (*CryptocurrencyListMessage, error) {

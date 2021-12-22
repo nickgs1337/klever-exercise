@@ -7,8 +7,13 @@ type Server struct {
 }
 
 func (server *Server) Create(context context.Context, message *CryptocurrencyMessage) (*CryptocurrencyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	newCurrency, err := Create(fromMessage(message))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toMessage(newCurrency), nil
 }
 
 func (server *Server) Get(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {

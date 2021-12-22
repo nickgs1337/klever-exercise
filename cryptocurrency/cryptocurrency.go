@@ -61,8 +61,13 @@ func (server *Server) Delete(context context.Context, symbol *CryptocurrencySymb
 }
 
 func (server *Server) UpVote(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	currency, err := UpVote(symbol.Symbol)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toMessage(currency), nil
 }
 
 func (server *Server) DownVote(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {

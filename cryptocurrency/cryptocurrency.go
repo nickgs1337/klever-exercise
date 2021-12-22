@@ -51,8 +51,13 @@ func (server *Server) Update(context context.Context, request *UpdateCryptocurre
 }
 
 func (server *Server) Delete(context context.Context, symbol *CryptocurrencySymbol) (*EmptyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	err := Delete(symbol.Symbol)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &EmptyMessage{}, nil
 }
 
 func (server *Server) UpVote(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {

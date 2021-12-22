@@ -71,8 +71,13 @@ func (server *Server) UpVote(context context.Context, symbol *CryptocurrencySymb
 }
 
 func (server *Server) DownVote(context context.Context, symbol *CryptocurrencySymbol) (*CryptocurrencyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	currency, err := DownVote(symbol.Symbol)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toMessage(currency), nil
 }
 
 func (server *Server) CreateVoteStream(symbol *CryptocurrencySymbol, stream CryptocurrencyService_CreateVoteStreamServer) error {

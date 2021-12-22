@@ -93,6 +93,12 @@ func (server *Server) DownVote(context context.Context, symbol *CryptocurrencySy
 }
 
 func (server *Server) CreateVoteStream(symbol *CryptocurrencySymbol, stream CryptocurrencyService_CreateVoteStreamServer) error {
+	// validate if currency exists
+	_, err := GetBySymbol(symbol.Symbol)
+	if err != nil {
+		return err
+	}
+
 	conn := &Connection{
 		stream: stream,
 		symbol: symbol.Symbol,

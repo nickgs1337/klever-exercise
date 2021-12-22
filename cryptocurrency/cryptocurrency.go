@@ -41,8 +41,13 @@ func (server *Server) List(context context.Context, message *EmptyMessage) (*Cry
 }
 
 func (server *Server) Update(context context.Context, request *UpdateCryptocurrencyRequest) (*CryptocurrencyMessage, error) {
-	//TODO implement me
-	panic("implement me")
+	currency, err := Update(request.OldSymbol, fromMessage(request.NewCryptocurrency))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toMessage(currency), nil
 }
 
 func (server *Server) Delete(context context.Context, symbol *CryptocurrencySymbol) (*EmptyMessage, error) {

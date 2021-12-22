@@ -6,6 +6,12 @@ type Server struct {
 	connections []*Connection
 }
 
+type Connection struct {
+	stream CryptocurrencyService_CreateVoteStreamServer
+	symbol string
+	err    chan error
+}
+
 func (server *Server) Create(context context.Context, message *CryptocurrencyMessage) (*CryptocurrencyMessage, error) {
 	newCurrency, err := Create(fromMessage(message))
 
@@ -88,12 +94,6 @@ func (server *Server) CreateVoteStream(symbol *CryptocurrencySymbol, stream Cryp
 func (server *Server) mustEmbedUnimplementedCryptocurrencyServiceServer() {
 	//TODO implement me
 	panic("implement me")
-}
-
-type Connection struct {
-	stream CryptocurrencyService_CreateVoteStreamServer
-	symbol string
-	err    chan error
 }
 
 func fromMessage(message *CryptocurrencyMessage) *Cryptocurrency {

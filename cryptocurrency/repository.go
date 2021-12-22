@@ -108,6 +108,26 @@ func UpVote(symbol string) (*Cryptocurrency, error) {
 	return GetBySymbol(symbol)
 }
 
+func DownVote(symbol string) (*Cryptocurrency, error) {
+	_, err := GetBySymbol(symbol)
+	if err != nil {
+		return nil, err
+	}
+	result, err := getCollection().UpdateOne(
+		context.TODO(),
+		bson.M{"_id": symbol},
+		bson.D{
+			{"$inc", bson.D{{"votes", -1}}},
+		},
+	)
+	if err != nil {
+		return nil, errors.New("error while updating currency")
+	}
+	log.Printf("%d updated!", result.ModifiedCount)
+
+	return GetBySymbol(symbol)
+}
+
 func getCollection() *mongo.Collection {
 	return utils.GetDatabase().Collection(collection)
 }

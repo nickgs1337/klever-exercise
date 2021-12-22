@@ -57,6 +57,29 @@ func GetBySymbol(symbol string) (*Cryptocurrency, error) {
 	return &cryptocurrency, err
 }
 
+func Update(symbol string, cryptocurrency *Cryptocurrency) (*Cryptocurrency, error) {
+	_, err := GetBySymbol(cryptocurrency.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	result, err := getCollection().UpdateOne(
+		context.TODO(),
+		bson.M{"_id": cryptocurrency.Symbol},
+		bson.D{
+			{"$set", bson.D{{"_id", cryptocurrency.Symbol}}},
+			{"$set", bson.D{{"name", cryptocurrency.Name}}},
+			{"$set", bson.D{{"icon_url", cryptocurrency.IconURL}}},
+		},
+	)
+	if err != nil {
+		return nil, errors.New("error while updating currency")
+	}
+
+	log.Printf("%d updated!", result.ModifiedCount)
+
+	return cryptocurrency, nil
+}
+
 func getCollection() *mongo.Collection {
 	return utils.GetDatabase().Collection(collection)
 }

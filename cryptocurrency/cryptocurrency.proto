@@ -1,0 +1,43 @@
+syntax = "proto3";
+package cryptocurrency;
+
+option go_package = "klever/cryptocurrency";
+
+message CryptocurrencyListMessage {
+  repeated CryptocurrencyMessage cryptocurrency = 1;
+}
+
+message CryptocurrencyMessage {
+  string Symbol = 1;
+  string Name = 2;
+  string IconURL = 3;
+  int32 votes = 4;
+}
+
+message CryptocurrencySymbol {
+  string Symbol = 1;
+}
+
+message UpdateCryptocurrencyRequest {
+  string OldSymbol = 1;
+  CryptocurrencyMessage newCryptocurrency = 2;
+}
+
+message CryptocurrencyNewVoteNotification {
+  int32 votes = 1;
+}
+
+message EmptyMessage {
+}
+
+service CryptocurrencyService {
+  rpc Create(CryptocurrencyMessage) returns (CryptocurrencyMessage) {}
+  rpc Get(CryptocurrencySymbol) returns (CryptocurrencyMessage) {}
+  rpc List(EmptyMessage) returns (CryptocurrencyListMessage) {}
+  rpc Update(UpdateCryptocurrencyRequest) returns (CryptocurrencyMessage) {}
+  rpc Delete(CryptocurrencySymbol) returns (EmptyMessage) {}
+
+  rpc UpVote(CryptocurrencySymbol) returns (CryptocurrencyMessage) {}
+  rpc DownVote(CryptocurrencySymbol) returns (CryptocurrencyMessage) {}
+  rpc CreateVoteStream(CryptocurrencySymbol) returns (stream CryptocurrencyNewVoteNotification) {}
+}
